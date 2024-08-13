@@ -4,8 +4,9 @@ import Image, { StaticImageData } from "next/image";
 import { InfinityIcon } from "lucide-react";
 import heart from "../public/Designbolts-Free-Valentine-Heart-Heart.256.png";
 import pointicon from "../public/3d-render-flash-lightning-sale-thunder-bolt-icon.jpg";
+import { courses } from "@/database/schema";
 type Props = {
-  activeCourse: { imageSrc: StaticImageData; title: string };
+  activeCourse: typeof courses.$inferSelect;
   hearts: number;
   points: number;
   hasActiveSubscription: boolean;
