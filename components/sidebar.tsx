@@ -12,7 +12,7 @@ import houseIcon from "../public/Microsoft-Fluentui-Emoji-3d-House-3d.512.png";
 import { ClerkLoading, ClerkLoaded, UserButton } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
 import leaderboard from "../public/Graphicrating-Koloria-Chart-Bar-3D-Descending.32.png";
-import shop from "../public/Sonya-Swarm-Shopping.256.png";
+
 import quests from "../public/Pixelkit-Flat-Jewels-Arrow-Bulls-Eye.512.png";
 
 export const Sidebar = ({ className }: Props) => {
@@ -34,14 +34,14 @@ export const Sidebar = ({ className }: Props) => {
       </Link>
 
       <div className="flex flex-col gap-y-2 flex-1">
-        <SideBaritem label="Learn" href="/learn" iconSrc={houseIcon} />
+        <SideBaritem label="Learn" href="/learn" iconSrc="/Home.png" />
         <SideBaritem
           label="Leaderboard"
           href="/leaderboard"
-          iconSrc={leaderboard}
+          iconSrc="/leaderboard.png"
         />
-        <SideBaritem label="Quests" href="/quests" iconSrc={quests} />
-        <SideBaritem label="Shop" href="/shop" iconSrc={shop} />
+        <SideBaritem label="Quests" href="/quests" iconSrc="/Quest.png" />
+        <SideBaritem label="Shop" href="/shop" iconSrc="/shop.png" />
       </div>
       <div className="p-4">
         <ClerkLoading>

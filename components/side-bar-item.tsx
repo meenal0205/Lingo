@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 type Props = {
   label: string;
-  iconSrc: StaticImageData;
+  iconSrc: string;
   href: string;
 };
 

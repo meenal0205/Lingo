@@ -8,6 +8,7 @@ import { error } from "console";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+const POINTS_TO_REFILL=10;
 
 export const upertUserProgress =  async (courseId : number)=> {
     const {userId} = await auth();
@@ -25,10 +26,10 @@ export const upertUserProgress =  async (courseId : number)=> {
     }
 
 
-    // TODO enable onc units ans lessons are added
-    // if(!course.units.length || !course.units[0].lessons.length){
-    //     throw new Error("Course is empty");
-    // }
+   
+    if(!course.units.length || !course.units[0].lessons.length){
+        throw new Error("Course is empty");
+    }
 
     const existinguserProgress = await getUserProgress();
 
@@ -104,11 +105,31 @@ export const reduceHearts = async (challengeId:number)=>{
     revalidatePath("/leaderboard")
     revalidatePath(`/lesson/${lessonId}`)
     revalidatePath("/shop")
-    
-
-   
-    
-    
+}
 
 
+export const refilHearts= async()=>{
+    const currentUserProgress = await getUserProgress();
+    if(!currentUserProgress){
+        throw new Error ("User progress not found");
+    }
+
+    if(currentUserProgress.hearts===5){
+        throw new Error("Hearts are already full.")
+    }
+
+    if(currentUserProgress.points < POINTS_TO_REFILL){
+        throw new Error("Not enough points")
+    }
+
+    await db.update(userProgress).set({
+        hearts:5,
+        points:currentUserProgress.points-POINTS_TO_REFILL,
+        }).where(eq(userProgress.userId,currentUserProgress.userId));
+
+    revalidatePath("/shop");
+    revalidatePath("/learn")
+    revalidatePath("/quests")
+    revalidatePath("/leaderboard")
+    revalidatePath("/lesson")
 }

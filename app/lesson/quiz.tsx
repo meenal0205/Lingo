@@ -11,12 +11,12 @@ import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { ChartLine } from "lucide-react";
 import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
-import { useAudio, useWindowSize } from "react-use";
+import { useAudio, useWindowSize, useMount } from "react-use";
 import Image from "next/image";
 import { ResultCard } from "./result-card";
 import { useRouter } from "next/navigation";
 import { useHeartModal } from "@/store/use-hearts-modal";
-
+import { usePracticeModal } from "@/store/use-practice-modal";
 type Props = {
   initalLessonId: number;
   initialPercentage: number;
@@ -35,7 +35,15 @@ export const Quiz = ({
   initialHearts,
   userSubscription,
 }: Props) => {
+  const { open: openPracticeModal } = usePracticeModal();
   const { open: openHeartsModal } = useHeartModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) {
+      openPracticeModal();
+    }
+  });
+
   const { width, height } = useWindowSize();
   const router = useRouter();
   const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
@@ -46,7 +54,9 @@ export const Quiz = ({
 
   const [pending, startTransition] = useTransition();
   const [hearts, setHearts] = useState(initialHearts);
-  const [percentage, setPercetage] = useState(initialPercentage);
+  const [percentage, setPercetage] = useState(() => {
+    return initialPercentage === 100 ? 0 : initialPercentage;
+  });
   const [challenges] = useState(initalLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
     const uncompletedIndex = challenges.findIndex(
